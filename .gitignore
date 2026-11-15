@@ -1,0 +1,26 @@
+# Local notebook and Python state
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+
+# Credentials and environment configuration
+.env
+.env.*
+!.env.example
+.kaggle/
+kaggle.json
+credentials.json
+.aws/
+.codex/
+.agents/
+
+# Competition data and generated prediction files
+image_train.csv
+image_test.csv
+sentiment_train.csv
+sentiment_test.csv
+sample_submission.csv
+part_b/
