@@ -8,7 +8,7 @@ Image recognition and sentiment classification for **COMP472, Fall 2026**. The p
 |---|---|---|
 | Quan Mai | k-NN classification and k-Means clustering | Implemented and documented below |
 | Tarek Barake | Decision Tree and Random Forest | Notebook and model-specific instructions pending; see Section 8 |
-| Youssef Jedidi | Feed-forward Neural Network | Notebook and model-specific instructions pending; see Section 9 |
+| Youssef Jedidi | Neural networks (image CNN, sentiment MLP) and combined prediction notebook | Implemented and documented in Section 9 |
 | All members | Compare validation results, select a model for each task, combine predictions, and prepare the report/presentation | Complete after all classifiers are evaluated |
 
 
@@ -19,7 +19,9 @@ Image recognition and sentiment classification for **COMP472, Fall 2026**. The p
 | File or directory | Purpose |
 |---|---|
 | [README.md](README.md) | File inventory, setup, preprocessing, training/evaluation, prediction, and team integration instructions. |
-| [quanmai-partb.ipynb](quanmai-partb.ipynb) | **Current notebook to run.** Data loading/splitting, k-NN implementation, preprocessing comparisons, the added image setup, model selection, prediction export, and k-Means on both datasets. Includes saved Kaggle Version 3 results. |
+| [quanmai-partb.ipynb](quanmai-partb.ipynb) | Data loading/splitting, k-NN implementation, preprocessing comparisons, the added image setup, model selection, prediction export, and k-Means on both datasets. Includes saved Kaggle Version 3 results. |
+| [COMP472-FFNN-CNN.ipynb](COMP472-FFNN-CNN.ipynb) | Image CNN and sentiment MLP: preprocessing, training, validation curves, and neural-network submission export. Includes saved Kaggle GPU outputs. |
+| [COMP472-Group1-Prediction-Only.ipynb](COMP472-Group1-Prediction-Only.ipynb) | Final combined pipeline (image k-NN + sentiment MLP): validation check, full-data refit, and competition `submission.csv` export. |
 
 
 ## 3. Data and environment setup
@@ -48,6 +50,8 @@ Training CSVs contain `id`, feature columns, and `label`; test CSVs contain `id`
    If Kaggle attaches the data elsewhere, set `DATA_DIR` to the directory containing all five CSVs.
 3. Select a **CPU** session. Numerical operations are limited to four CPU threads; a GPU and internet access are not required for execution.
 4. Restart the session and run all cells from top to bottom, or use **Save Version → Save & Run All** for a completed run with saved outputs.
+
+[COMP472-FFNN-CNN.ipynb](COMP472-FFNN-CNN.ipynb) and [COMP472-Group1-Prediction-Only.ipynb](COMP472-Group1-Prediction-Only.ipynb) use the same competition data path (`data_dir` in Cell 1) and write their prediction CSVs to `/kaggle/working`. Run all cells top to bottom. Use a **CPU** session for the prediction-only notebook; a **GPU** session is recommended for the CNN notebook (it automatically uses CUDA when available and falls back to CPU otherwise).
 
 ## 4. Data preprocessing: execution order and transformations
 
@@ -150,7 +154,9 @@ Complete this comparison using each member's results on the shared validation ro
 | k-NN | Quan | 67.975% | 65.500% | Current notebook, Kaggle Version 3 |
 | Decision Tree | Tarek | TBD | TBD | Pending |
 | Random Forest | Tarek | TBD | TBD | Pending |
-| Feed-forward Neural Network | Youssef | TBD | TBD | Pending |
+| CNN (images) / MLP (sentiment) | Youssef | 46.300% | 66.542% | [COMP472-FFNN-CNN.ipynb](COMP472-FFNN-CNN.ipynb), Kaggle Version 3 GPU run |
+
+For our final competition submission, [COMP472-Group1-Prediction-Only.ipynb](COMP472-Group1-Prediction-Only.ipynb) pairs Quan's image k-NN (**67.975%**) with Youssef's sentiment MLP (**66.375%** in the saved local CPU outputs; **66.250%** on Kaggle CPU, giving a **67.1125%** mean and a **0.684** public leaderboard score). Minor differences in sentiment MLP validation accuracy across runs (66.250%–66.542%) come from CPU vs. GPU and platform/library differences.
 
 ## 8. Tarek — Decision Tree and Random Forest (placeholder)
 
@@ -181,20 +187,44 @@ Complete this comparison using each member's results on the shared validation ro
 
 Update Section 7 after completion and identify which result corresponds to each saved model or prediction file.
 
-## 9. Youssef — Feed-forward Neural Network (placeholder)
+## 9. Youssef — Neural networks and combined prediction
 
-**Owner:** Youssef Jedidi. Replace these fields when the notebook is added; document both tasks.
+- **[COMP472-FFNN-CNN.ipynb](COMP472-FFNN-CNN.ipynb):** Trains and evaluates the image CNN and sentiment MLP, plots learning curves, and exports neural-only predictions.
+- **[COMP472-Group1-Prediction-Only.ipynb](COMP472-Group1-Prediction-Only.ipynb):** Runs our selected combination (image k-NN + sentiment MLP) for validation and generates the final competition submission.
 
-| Item | To be completed by Youssef |
-|---|---|
-| Notebook filename and link | TBD — add the actual file and update Section 2 |
-| Dependencies and tested versions | TBD — framework, CPU/GPU requirements, and installation commands |
-| Data paths and preprocessing | TBD — cells, transformations, and training-only fitting |
-| Shared validation split | Confirm Section 4.1, or explain any difference |
-| Architecture | TBD — 500 inputs/50 outputs for images; 768 inputs/3 outputs for sentiment; hidden layers and activations |
-| Training | TBD — cell order/commands, loss, optimizer, learning rate, batch size, epochs, seed, and regularization |
-| Evaluation | TBD — selected settings, validation accuracy for both tasks, learning curves, and error analysis |
-| Applying the model | TBD — refit/load procedure, inference preprocessing, prediction command, and `id,label` filenames |
-| Checkpoints or retraining | TBD — checkpoint names, reconstruction/loading code, or full retraining instructions |
+### 9.1. Dependencies and preprocessing
 
-Add delivered files to Section 2 and results to Section 7.
+Both notebooks use `numpy`, `pandas`, `torch`, and `scikit-learn` (plus `matplotlib` in `COMP472-FFNN-CNN.ipynb`), all pre-installed on Kaggle and tested locally on Python 3.11 (PyTorch 2.10, scikit-learn 1.8).
+
+- **Split:** Stratified 80/20 split with `SEED = 42` (16,000/4,000 for images; 9,600/2,400 for sentiment), matching the shared split in Section 4.1 (`id` and `label` excluded from features; sorting by `id` preserves the same split).
+- **Image preprocessing:** In `COMP472-FFNN-CNN.ipynb` (Cell 3), `StandardScaler` is fitted on training rows only. In `COMP472-Group1-Prediction-Only.ipynb` (Cell 2), the image k-NN uses the same root-ratio + covariance pipeline as Section 4.2, fitted on training rows for validation and on all labeled rows for test prediction.
+- **Sentiment preprocessing:** Both notebooks pass the 768 supplied features directly to the MLP without extra scaling.
+
+### 9.2. Architecture and training
+
+| Setting | Image CNN | Sentiment MLP |
+|---|---|---|
+| Input → output | 500 features → 50 classes | 768 features → 3 classes |
+| Architecture | BatchNorm1d → Dropout(0.3) → Linear(500, 4096) → reshape to 16×16×16 learned feature maps → two 3×3 Conv2d blocks (32 channels, second stride 2, BatchNorm2d) → Flatten → Linear(2048, 50) | Linear 768 → 300 → 64 → 3 |
+| Activations | GELU after projection and each conv block | ReLU after both hidden layers |
+| Regularization | Dropout 0.3 (input), 0.1 / 0.2 (2D after reshape and between conv blocks), 0.6 (before classifier); BatchNorm | Dropout 0.2 after second hidden layer |
+| Loss / optimizer | CrossEntropyLoss / AdamW (`lr=3e-4`, `weight_decay=0.05`) | CrossEntropyLoss / AdamW (`lr=1e-3`, `weight_decay=0.01`) |
+| Schedule / epochs | CosineAnnealingLR (`T_max=60`), 59 epochs | CosineAnnealingLR (`T_max=6`), 5 epochs |
+| Batch size / seed | 128 / 42 | 64 / 42 |
+
+### 9.3. How to run, evaluate, and apply
+
+No saved model checkpoints are required; both notebooks retrain from scratch and run inference end to end.
+
+**Neural comparison (`COMP472-FFNN-CNN.ipynb`, 7 cells):**
+1. **Cell 1:** Load CSVs from `data_dir` and build the 80/20 splits.
+2. **Cells 2–3:** Define the CNN/MLP models, scaling, and PyTorch training loop.
+3. **Cells 4–5:** Train and evaluate the sentiment MLP (**66.542%** val) and image CNN (**46.300%** val).
+4. **Cell 6:** Print the combined mean and plot training/validation learning curves. (On images, training accuracy with dropout disabled approaches 100% while validation stays near 46.3%, showing clear overfitting; on sentiment, training accuracy is tracked during training batches with dropout enabled.)
+5. **Cell 7:** Refit both models on 100% of labeled data and write `/kaggle/working/comp472_cnn_submission.csv` (10,000 `id,label` rows aligned to `sample_submission.csv`).
+
+**Final combined submission (`COMP472-Group1-Prediction-Only.ipynb`, 5 cells):**
+1. **Cell 1:** Load image and sentiment train/test CSVs from `data_dir`.
+2. **Cells 2–3:** Define the image k-NN and sentiment MLP training/inference functions.
+3. **Cell 4:** Run the 80/20 validation check for both models (**67.975%** image, **66.375%** local CPU sentiment).
+4. **Cell 5:** Refit on all 20,000 labeled image rows and 12,000 sentiment rows, verify ID alignment, and write `/kaggle/working/submission.csv` (10,000 `id,label` rows).
