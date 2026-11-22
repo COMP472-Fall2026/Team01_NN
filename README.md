@@ -24,7 +24,7 @@ Image recognition and sentiment classification for **COMP472, Fall 2026**. The p
 | [COMP472-Group1-Prediction-Only.ipynb](COMP472-Group1-Prediction-Only.ipynb) | Final combined pipeline (image k-NN + sentiment MLP): validation check, full-data refit, and competition `submission.csv` export. |
 
 
-## 3. Data and environment setup
+## 3. Quan
 
 ### 3.1. Required data
 
