@@ -7,7 +7,7 @@ Image recognition and sentiment classification for **COMP472, Fall 2026**. The p
 | Member | Assigned work | Status |
 |---|---|---|
 | Quan Mai | k-NN classification and k-Means clustering | Implemented and documented below |
-| Tarek Barake | Decision Tree and Random Forest | Notebook and model-specific instructions pending; see Section 8 |
+| Tarek Barake | Decision Tree and Random Forest | Implemented and documented in Section 8 |
 | Youssef Jedidi | Neural networks (image CNN, sentiment MLP) and combined prediction notebook | Implemented and documented in Section 9 |
 | All members | Compare validation results, select a model for each task, combine predictions, and prepare the report/presentation | Complete after all classifiers are evaluated |
 
@@ -152,40 +152,42 @@ Complete this comparison using each member's results on the shared validation ro
 | Classifier | Owner | Image validation accuracy | Sentiment validation accuracy | Implementation/results |
 |---|---|---:|---:|---|
 | k-NN | Quan | 67.975% | 65.500% | Current notebook, Kaggle Version 3 |
-| Decision Tree | Tarek | TBD | TBD | Pending |
-| Random Forest | Tarek | TBD | TBD | Pending |
+| Decision Tree | Tarek | 12.500% | 60.000% | [Comp 472 v9.ipynb](https://github.com/COMP472-Fall2026/Team01_NN/blob/main/Comp%20472%20v9.ipynb) |
+| Random Forest | Tarek | 29.075% | 66.542% | [Comp 472 v9.ipynb](https://github.com/COMP472-Fall2026/Team01_NN/blob/main/Comp%20472%20v9.ipynb) |
 | CNN (images) / MLP (sentiment) | Youssef | 46.300% | 66.542% | [COMP472-FFNN-CNN.ipynb](COMP472-FFNN-CNN.ipynb), Kaggle Version 3 GPU run |
 
 For our final competition submission, [COMP472-Group1-Prediction-Only.ipynb](COMP472-Group1-Prediction-Only.ipynb) pairs Quan's image k-NN (**67.975%**) with Youssef's sentiment MLP (**66.375%** in the saved local CPU outputs; **66.250%** on Kaggle CPU, giving a **67.1125%** mean and a **0.684** public leaderboard score). Minor differences in sentiment MLP validation accuracy across runs (66.250%–66.542%) come from CPU vs. GPU and platform/library differences.
 
-## 8. Tarek — Decision Tree and Random Forest (placeholder)
+## 8. Tarek — Decision Tree and Random Forest
 
-**Owner:** Tarek Barake. Replace these fields when the notebook is added; document both image and sentiment tasks.
+**Owner:** Tarek Barake
 
-| Item | To be completed by Tarek |
+**Notebook:** [Comp 472 v9.ipynb](https://github.com/COMP472-Fall2026/Team01_NN/blob/main/Comp%20472%20v9.ipynb)
+
+| Item | Details |
 |---|---|
-| Notebook filename and link | TBD — add the actual file and update Section 2 |
-| Dependencies and tested versions | TBD |
-| Data paths and preprocessing | TBD — identify cells, transformations, and training-only fitting |
-| Shared validation split | Confirm Section 4.1, or explain any difference |
+| Dependencies | NumPy, pandas, Matplotlib, joblib (optional), scikit-learn (for comparison tests) |
+| Data and preprocessing | Kaggle image and sentiment CSV files; 64-bin quantile transformation fitted on training data |
+| Validation split | Stratified 80/20 split, seed 42. Custom implementation; validation rows may differ from teammates' splits |
+| Running instructions | Run notebook cells in order, with `QUICK_RUN = False` for full experiments |
 
 ### Decision Tree
 
-- **Implementation:** TBD — split criterion/search, stopping rules, and prediction traversal.
-- **Train:** TBD — cell order/commands and tested depth, split, and leaf settings.
-- **Evaluate:** TBD — selected settings, training/validation metrics for both tasks, and error analysis.
-- **Apply:** TBD — refit on all labeled rows, prediction cells/commands, and output filenames.
-- **Saved model/retraining:** TBD — checkpoint path and loader, or complete retraining instructions.
+- **Implementation:** CART Decision Tree implemented from scratch using NumPy. Supports Gini and entropy impurity, maximum depth, minimum split size, and minimum leaf size.
+- **Training:** Hyperparameter tuning in Section 6, including depth, leaf size, split size, impurity criterion, and number of bins.
+- **Evaluation:** Image accuracy **12.500%**; sentiment accuracy **50.917%**. Detailed results and overfitting analysis in Sections 9–11.
+- **Application:** Not selected for the final Kaggle submission.
+- **Retraining:** Run the notebook from the beginning; no saved model checkpoint.
 
 ### Random Forest
 
-- **Implementation:** TBD — bootstrapping, feature subsampling, tree reuse, and voting.
-- **Train:** TBD — cell order/commands, tree count, depth, and feature-sampling settings.
-- **Evaluate:** TBD — selected settings and metrics for both tasks; comparison with a single tree.
-- **Apply:** TBD — refit, prediction cells/commands, and 5,000-row `id,label` outputs.
-- **Saved model/retraining:** TBD — checkpoint path and loader, or complete retraining instructions.
+- **Implementation:** Ensemble of custom Decision Trees with random feature selection, optional bootstrap sampling, and probability averaging.
+- **Training:** Hyperparameter tuning in Section 8, including feature selection, tree depth, leaf size, split size, criterion, and bootstrap. Final forests contain **200 trees** each.
+- **Evaluation:** Image accuracy **29.075%**; sentiment accuracy **60.000%**. Comparison with Decision Tree in Section 9.
+- **Application:** Not selected for the final Kaggle submission, as other team models achieved higher validation accuracies.
+- **Retraining:** Run the notebook from the beginning; no saved model checkpoint.
 
-Update Section 7 after completion and identify which result corresponds to each saved model or prediction file.
+**Summary:** Random Forest outperformed Decision Tree on both tasks. Full implementation, hyperparameter experiments, evaluation metrics, and visualizations are available in the linked notebook.
 
 ## 9. Youssef — Neural networks and combined prediction
 
