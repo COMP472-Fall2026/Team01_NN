@@ -20,8 +20,10 @@ Image recognition and sentiment classification for **COMP472, Fall 2026**. The p
 |---|---|
 | [README.md](README.md) | File inventory, setup, preprocessing, training/evaluation, prediction, and team integration instructions. |
 | [quanmai-partb.ipynb](quanmai-partb.ipynb) | Data loading/splitting, k-NN implementation, preprocessing comparisons, the added image setup, model selection, prediction export, and k-Means on both datasets. Includes saved Kaggle Version 3 results. |
+| [Comp 472 v9.ipynb](Comp%20472%20v9.ipynb) | Decision Tree and Random Forest implemented from scratch for image recognition and sentiment classification. Includes preprocessing, hyperparameter tuning, validation accuracy, model comparisons, and overfitting analysis. |
 | [COMP472-FFNN-CNN.ipynb](COMP472-FFNN-CNN.ipynb) | Image CNN and sentiment MLP: preprocessing, training, validation curves, and neural-network submission export. Includes saved Kaggle GPU outputs. |
 | [COMP472-Group1-Prediction-Only.ipynb](COMP472-Group1-Prediction-Only.ipynb) | Final combined pipeline (image k-NN + sentiment MLP): validation check, full-data refit, and competition `submission.csv` export. |
+| [COMP472-Team01-Technical-Report-Final.pdf](COMP472-Team01-Technical-Report-Final.pdf) | Final technical report covering model architectures, training methodology, hyperparameter experiments, evaluation results, comparisons, and team contributions. |
 
 
 ## 3. Quan
