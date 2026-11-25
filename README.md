@@ -154,8 +154,8 @@ Complete this comparison using each member's results on the shared validation ro
 | Classifier | Owner | Image validation accuracy | Sentiment validation accuracy | Implementation/results |
 |---|---|---:|---:|---|
 | k-NN | Quan | 67.975% | 65.500% | [quanmai-partb.ipynb](quanmai-partb.ipynb) |
-| Decision Tree | Tarek | 12.500% | 60.000% | [Comp 472 v9.ipynb](https://github.com/COMP472-Fall2026/Team01_NN/blob/main/Comp%20472%20v9.ipynb) |
-| Random Forest | Tarek | 29.075% | 66.542% | [Comp 472 v9.ipynb](https://github.com/COMP472-Fall2026/Team01_NN/blob/main/Comp%20472%20v9.ipynb) |
+| Decision Tree | Tarek | 12.500% | 50.917% | [Comp 472 v9.ipynb](https://github.com/COMP472-Fall2026/Team01_NN/blob/main/Comp%20472%20v9.ipynb) |
+| Random Forest | Tarek | 29.075% | 60.000% | [Comp 472 v9.ipynb](https://github.com/COMP472-Fall2026/Team01_NN/blob/main/Comp%20472%20v9.ipynb) |
 | CNN (images) / MLP (sentiment) | Youssef | 46.300% | 66.542% | [COMP472-FFNN-CNN.ipynb](COMP472-FFNN-CNN.ipynb), Kaggle Version 3 GPU run |
 
 For our final competition submission, [COMP472-Group1-Prediction-Only.ipynb](COMP472-Group1-Prediction-Only.ipynb) pairs Quan's image k-NN (**67.975%**) with Youssef's sentiment MLP (**66.375%** in the saved local CPU outputs; **66.250%** on Kaggle CPU, giving a **67.1125%** mean and a **0.684** public leaderboard score). Minor differences in sentiment MLP validation accuracy across runs (66.250%–66.542%) come from CPU vs. GPU and platform/library differences.
